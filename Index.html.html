@@ -1,0 +1,296 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Lehrmittel-Inhaltsverzeichnis</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/tabler-icons/2.44.0/tabler-icons.min.css">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
+            background-color: #f8f7f3;
+            padding: 2rem;
+            color: #3d3d3a;
+        }
+        
+        .container {
+            max-width: 700px;
+            margin: 0 auto;
+        }
+        
+        h1 {
+            font-size: 24px;
+            font-weight: 500;
+            margin-bottom: 2rem;
+            color: #2c2c2a;
+        }
+        
+        .lehrmittel-group {
+            display: flex;
+            flex-direction: column;
+            gap: 0.5rem;
+            margin-bottom: 1rem;
+        }
+        
+        .lehrmittel-button {
+            width: 100%;
+            padding: 0.75rem 1rem;
+            background-color: #ffffff;
+            border: 1px solid #d3d1c7;
+            border-radius: 8px;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            font-size: 15px;
+            font-weight: 500;
+            color: #2c2c2a;
+            transition: all 0.2s;
+        }
+        
+        .lehrmittel-button:hover {
+            background-color: #f1ede5;
+            border-color: #b4b2a9;
+        }
+        
+        .lehrmittel-button:active {
+            transform: scale(0.98);
+        }
+        
+        .chevron {
+            display: inline-block;
+            transition: transform 0.2s;
+            font-size: 16px;
+        }
+        
+        .chevron.open {
+            transform: rotate(0deg);
+        }
+        
+        .chevron.closed {
+            transform: rotate(-90deg);
+        }
+        
+        .kapitel-list {
+            padding-left: 2rem;
+            border-left: 2px solid #d3d1c7;
+            margin-top: 0.5rem;
+            margin-bottom: 0.5rem;
+            display: flex;
+            flex-direction: column;
+            gap: 0.25rem;
+            margin-left: 0.5rem;
+        }
+        
+        .kapitel-link {
+            padding: 0.5rem 0.75rem;
+            font-size: 14px;
+            color: #185fa5;
+            text-decoration: none;
+            border-radius: 8px;
+            transition: background-color 0.2s;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+        
+        .kapitel-link:hover {
+            background-color: #f1ede5;
+            color: #0c447c;
+        }
+        
+        .kapitel-link i {
+            font-size: 14px;
+        }
+        
+        .hidden {
+            display: none;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>Lehrmittel-Übersicht</h1>
+        <div id="lehrmittel-container" class="lehrmittel-group"></div>
+    </div>
+
+    <script>
+        const sharePointBase = 'https://schulediemtigtalch.sharepoint.com/sites/F.Stucki/Freigegebene%20Dokumente';
+
+        const lehrmittel = [
+            {
+                id: 1,
+                name: '01 Repetitorium Grundlagen',
+                ordner: '01%20Repetitorium%20Grundlagen',
+                kapitel: [
+                    '00 Inhaltsverzeichnis',
+                    '01 Office-Bedienelemente',
+                    '02 Speichern und Drucken',
+                    '03 Ablagestrukturen',
+                    '04 Grundlegende Bedienung',
+                    '05 Tastenfunktionen',
+                    '06 Markieren, Kopieren, Verschieben',
+                    '07 Dokumente im Web erstellen und teilen',
+                    '08 Illustrationen',
+                    '09 Browser einrichten',
+                    '10 Informationen im Internet schaffen und auswerten',
+                    '11 Qualität und Nutzen von Informationen beurteilen',
+                    '12 Prüfungsaufgaben',
+                    '13 Index'
+                ]
+            },
+            {
+                id: 2,
+                name: '02 Textverarbeitung mit Word 365',
+                ordner: '02%20Textverarbeitung%20mit%20Word%20365',
+                kapitel: [
+                    '00 Inhaltsverzeichnis',
+                    '01 Textformatierung',
+                    '02 10-Finger-System',
+                    '03 Rechtschreibprüfung',
+                    '04 Seiteneeinrichtung',
+                    '05 Absatzformatierung',
+                    '06 Tabulatoren',
+                    '07 Aufzählungen und Nummerierungen',
+                    '08 Tabellen',
+                    '09 Formatvorlagen und Inhaltsverzeichnis',
+                    '10 Seriendruck',
+                    '11 Textmarken und Querverweise',
+                    '12 Beschriftungen, Fussnoten, Abbildungsverzeichnis',
+                    '13 Nachverfolgen, Kommentare, Vergleichen',
+                    '14 Anhang Prüfungsaufgaben',
+                    '15 Index'
+                ]
+            },
+            {
+                id: 3,
+                name: '03 Tabellenkalkulation mit Excel 365',
+                ordner: '03%20Tabellenkalkulation%20mit%20Excel%20365',
+                kapitel: [
+                    '00 Inhaltsverzeichnis',
+                    '01 Daten eingeben und navigieren',
+                    '02 Datentabellen',
+                    '03 Berechnungen mit Formeln durchführen',
+                    '04 Diagramme',
+                    '05 Zellen formatieren, Formate übertragen',
+                    '06 Seitenlayout, Ansichten',
+                    '07 Bezüge',
+                    '08 Anzeigenprobleme und Fehler',
+                    '09 Einfache Funktionen',
+                    '10 Prüfungsaufgaben',
+                    '11 Index'
+                ]
+            },
+            {
+                id: 4,
+                name: '04 Präsentation mit PowerPoint 365',
+                ordner: '04%20Pr%C3%A4sentation%20mit%20PowerPoint%20365',
+                kapitel: [
+                    '00 Inhaltsverzeichnis',
+                    '01 Folien erstellen',
+                    '02 Texte gestalten',
+                    '03 Folien-, Notizen- und Handzettelmaster',
+                    '04 Diagramme',
+                    '05 Folien gestalten',
+                    '06 Aufzählungen und Nummerierungen',
+                    '07 Präsentation durchführen',
+                    '08 Verknüpfungen, Hyperlinks',
+                    '09 Präsentation drucken und weitergeben',
+                    '10 Animationen und Übergänge',
+                    '11 Film- und Sounddateien einfügen',
+                    '12 Prüfungsaufgaben',
+                    '13 Index'
+                ]
+            },
+            {
+                id: 5,
+                name: '05 Bilder, Video und Audio',
+                ordner: '05%20Bilder%2C%20Video%20und%20Audio',
+                kapitel: [
+                    '00 Inhaltsverzeichnis',
+                    '01 Fotos aufnehmen, speichern und optimieren',
+                    '02 Grundlagen der Bildbearbeitung',
+                    '03 Einfache Bildbearbeitung',
+                    '04 Erweiterte Bildbearbeitung',
+                    '05 Videobearbeitung, Videobearbeitung',
+                    '06 Audioaufnahme, Audiobearbeitung',
+                    '07 Prüfungsaufgaben',
+                    '08 Index'
+                ]
+            }
+        ];
+
+        const expanded = {};
+
+        function toggleLehrmittel(id) {
+            expanded[id] = !expanded[id];
+            render();
+        }
+
+        function buildPdfUrl(lehrmittelOrdner, kapitelName) {
+            const kapitelEncoded = kapitelName.replace(/\s/g, '%20');
+            return `${sharePointBase}/${lehrmittelOrdner}/${kapitelEncoded}.pdf`;
+        }
+
+        function render() {
+            const container = document.getElementById('lehrmittel-container');
+            container.innerHTML = '';
+
+            lehrmittel.forEach(lm => {
+                const lmDiv = document.createElement('div');
+                
+                const button = document.createElement('button');
+                button.className = 'lehrmittel-button';
+                button.onclick = () => toggleLehrmittel(lm.id);
+                
+                const span = document.createElement('span');
+                span.textContent = lm.name;
+                
+                const chevron = document.createElement('i');
+                chevron.className = `ti ti-chevron-down chevron ${expanded[lm.id] ? 'open' : 'closed'}`;
+                chevron.setAttribute('aria-hidden', 'true');
+                
+                button.appendChild(span);
+                button.appendChild(chevron);
+                lmDiv.appendChild(button);
+
+                if (expanded[lm.id]) {
+                    const kapitelDiv = document.createElement('div');
+                    kapitelDiv.className = 'kapitel-list';
+
+                    lm.kapitel.forEach(kapitel => {
+                        const a = document.createElement('a');
+                        a.className = 'kapitel-link';
+                        a.href = buildPdfUrl(lm.ordner, kapitel);
+                        a.target = '_blank';
+                        a.rel = 'noopener noreferrer';
+
+                        const icon = document.createElement('i');
+                        icon.className = 'ti ti-file-pdf';
+                        icon.setAttribute('aria-hidden', 'true');
+
+                        const text = document.createElement('span');
+                        text.textContent = kapitel;
+
+                        a.appendChild(icon);
+                        a.appendChild(text);
+                        kapitelDiv.appendChild(a);
+                    });
+
+                    lmDiv.appendChild(kapitelDiv);
+                }
+
+                container.appendChild(lmDiv);
+            });
+        }
+
+        render();
+    </script>
+</body>
+</html>
